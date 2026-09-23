@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # 1. Contingency Database (Dead Letters / Audit)
+  postgres:
+    image: postgres:16-alpine
+    container_name: syncronex-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Password123!
+      POSTGRES_DB: syncronex_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - syncronex_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d syncronex_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # 2. Message Queue for Asynchronous Ingestion
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: syncronex-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+    ports:
+      - "5672:5672"   # AMQP communication port (Used by .NET)
+      - "15672:15672" # Management UI port
+    volumes:
+      - syncronex_mqdata:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  syncronex_pgdata:
+  syncronex_mqdata:
