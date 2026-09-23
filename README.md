@@ -1,6 +1,6 @@
 # Syncronex: Enterprise-Grade Sync Middleware 🚀
 
-Syncronex is a robust, asynchronous middleware solution built with **.NET 10** designed to reliably ingest webhooks (e.g., from Shopify) and distribute them to external systems (CRM, Accounting). It implements a modular monolith architecture, background processing, and advanced resilience patterns to ensure zero data loss during high-load or system outages.
+> **Syncronex** is a production-ready integration middleware designed to solve a critical business problem: preventing data loss when external systems fail. Built with a modular architecture in **.NET 10**, it utilizes **RabbitMQ** for fail-fast asynchronous ingestion and **Polly** for resilient HTTP communication (exponential backoff). If external services experience prolonged outages, Syncronex guarantees zero data loss by safely routing failed payloads to a structured Dead-Letter database in **PostgreSQL**.
 
 ## 🏗️ Architecture & Technologies
 
@@ -47,4 +47,4 @@ Start the .NET engine:
 Send a POST request to `http://localhost:5271/api/webhooks/receive` using the provided sample JSON. Watch the console logs as the system queues the message, attempts to send it to the mock CRM, applies retry policies, and eventually saves it to the PostgreSQL Dead Letter table.
 
 ## 👨‍💻 Author
-**Cristofer Aranguren** - Associate Degree in Computer Science
+**Cristofer Aranguren** - Associate Degree in Computer Science, IUJO
