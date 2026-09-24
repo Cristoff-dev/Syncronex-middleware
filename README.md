@@ -1,4 +1,4 @@
-# Syncronex: Enterprise-Grade Sync Middleware 🚀
+# Syncronex: Sync Middleware
 
 > **Syncronex** is a production-ready integration middleware designed to solve a critical business problem: preventing data loss when external systems fail. Built with a modular architecture in **.NET 10**, it utilizes **RabbitMQ** for fail-fast asynchronous ingestion and **Polly** for resilient HTTP communication (exponential backoff). If external services experience prolonged outages, Syncronex guarantees zero data loss by safely routing failed payloads to a structured Dead-Letter database in **PostgreSQL**.
 
