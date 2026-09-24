@@ -46,5 +46,41 @@ Start the .NET engine:
 ### 4. Test the Workflow
 Send a POST request to `http://localhost:5271/api/webhooks/receive` using the provided sample JSON. Watch the console logs as the system queues the message, attempts to send it to the mock CRM, applies retry policies, and eventually saves it to the PostgreSQL Dead Letter table.
 
+### Example
+Open a PowerShell window and send a POST request to trigger the webhook:
+
+```powershell
+$jsonPayload = @"
+{
+  "event_id": "evt_987654321",
+  "event_type": "order.created",
+  "timestamp": "2026-09-23T14:21:00Z",
+  "data": {
+    "order_id": "ORD-1045",
+    "currency": "USD",
+    "total_amount": 249.99,
+    "customer": {
+      "customer_id": "CUST-8832",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "john.doe@example.com",
+      "phone": "+1-555-0198"
+    },
+    "line_items": [
+      {
+        "sku": "TECH-KB-01",
+        "name": "Mechanical Keyboard v2",
+        "quantity": 1,
+        "unit_price": 199.99
+      }
+    ]
+  }
+}
+"@
+Invoke-RestMethod -Uri "http://localhost:5271/api/webhooks/receive" `
+  -Method Post `
+  -Body $jsonPayload `
+  -ContentType "application/json"
+```
 ## 👨‍💻 Author
 **Cristofer Aranguren** - Associate Degree in Computer Science, IUJO
